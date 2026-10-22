@@ -1,0 +1,61 @@
+{% extends 'shop/base.html' %}
+{% block title %}{% if category %}{{ category.name }}{% else %}Katalog{% endif %} — MyShop{% endblock %}
+
+{% block content %}
+<div class="catalog">
+  <aside class="catalog__sidebar">
+    <h3>Kategoriyalar</h3>
+    <ul class="cat-list">
+      <li><a href="{% url 'product_list' %}" class="{% if not category %}active{% endif %}">Barchasi</a></li>
+      {% for c in categories %}
+        <li>
+          <a href="{% url 'category' c.slug %}" class="{% if category and c.id == category.id %}active{% endif %}">
+            {% if c.parent %}— {% endif %}{{ c.name }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <form method="get" action="{{ request.path }}" class="filters">
+      {% if q %}<input type="hidden" name="q" value="{{ q }}">{% endif %}
+
+      <h3>Narx (so'm)</h3>
+      <div class="row">
+        <input type="number" name="min" value="{{ request.GET.min }}" placeholder="dan" min="0">
+        <input type="number" name="max" value="{{ request.GET.max }}" placeholder="gacha" min="0">
+      </div>
+
+      <h3>Saralash</h3>
+      <select name="sort">
+        <option value="new" {% if request.GET.sort == 'new' %}selected{% endif %}>Yangilari</option>
+        <option value="cheap" {% if request.GET.sort == 'cheap' %}selected{% endif %}>Arzonroq</option>
+        <option value="expensive" {% if request.GET.sort == 'expensive' %}selected{% endif %}>Qimmatroq</option>
+      </select>
+
+      <button class="btn btn--primary btn--block">Qo'llash</button>
+      <a href="{{ request.path }}" class="btn btn--block">Tozalash</a>
+    </form>
+  </aside>
+
+  <section class="catalog__main">
+    <div class="catalog__head">
+      <h1>
+        {% if q %}"{{ q }}" bo'yicha natijalar
+        {% elif category %}{{ category.name }}
+        {% else %}Katalog{% endif %}
+      </h1>
+      <span class="muted">{{ page_obj.paginator.count }} ta mahsulot</span>
+    </div>
+
+    <div class="products">
+      {% for product in page_obj %}
+        {% include 'shop/includes/product_card.html' %}
+      {% empty %}
+        <p class="muted">Hech narsa topilmadi.</p>
+      {% endfor %}
+    </div>
+
+    {% include 'shop/includes/pagination.html' %}
+  </section>
+</div>
+{% endblock %}
