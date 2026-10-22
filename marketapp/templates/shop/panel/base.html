@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Panel{% endblock %} — MyShop admin</title>
+  <link rel="stylesheet" href="{% static 'includes/components.css' %}">
+  <link rel="stylesheet" href="{% static 'panel/panel.css' %}">
+</head>
+<body class="panel">
+  <aside class="sidebar" id="sidebar">
+    <a href="{% url 'panel_dashboard' %}" class="sidebar__logo">MyShop <small>admin</small></a>
+    {% with url_name=request.resolver_match.url_name %}
+    <nav class="sidebar__nav">
+      <a href="{% url 'panel_dashboard' %}" class="{% if url_name == 'panel_dashboard' %}active{% endif %}">📊 Dashboard</a>
+      <a href="{% url 'panel_orders' %}" class="{% if 'order' in url_name %}active{% endif %}">📦 Buyurtmalar</a>
+      <a href="{% url 'panel_products' %}" class="{% if 'product' in url_name %}active{% endif %}">🛍 Mahsulotlar</a>
+      <a href="{% url 'panel_categories' %}" class="{% if 'categor' in url_name %}active{% endif %}">🗂 Kategoriyalar</a>
+    </nav>
+    {% endwith %}
+    <div class="sidebar__bottom">
+      <a href="{% url 'home' %}" target="_blank">↗ Saytni ochish</a>
+      <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link">Chiqish</button></form>
+    </div>
+  </aside>
+  <div class="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open')"></div>
+
+  <div class="panel__main">
+    <header class="topbar">
+      <button class="burger" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+      <h1 class="topbar__title">{% block page_title %}{% endblock %}</h1>
+      <span class="topbar__user">👤 {{ user.username }}</span>
+    </header>
+
+    {% for m in messages %}<div class="alert alert--{{ m.tags }}">{{ m }}</div>{% endfor %}
+
+    <section class="panel__content">{% block content %}{% endblock %}</section>
+  </div>
+</body>
+</html>

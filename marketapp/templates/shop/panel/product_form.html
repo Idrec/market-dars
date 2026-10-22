@@ -1,0 +1,37 @@
+{% extends 'shop/panel/base.html' %}
+{% block title %}{% if product %}Tahrirlash{% else %}Yangi mahsulot{% endif %}{% endblock %}
+{% block page_title %}{% if product %}{{ product.name }}{% else %}Yangi mahsulot{% endif %}{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" class="card form">
+  {% csrf_token %}
+  {% include 'shop/includes/form_fields.html' %}
+
+  <div class="form__group">
+    <label>Rasmlar qo'shish</label>
+    <input type="file" name="images" accept="image/*" multiple>
+  </div>
+
+  <div class="row">
+    <button class="btn btn--primary">Saqlash</button>
+    <a href="{% url 'panel_products' %}" class="btn">Bekor qilish</a>
+  </div>
+</form>
+
+{% if product and product.images.all %}
+<div class="card">
+  <h2>Mavjud rasmlar</h2>
+  <div class="images">
+    {% for img in product.images.all %}
+      <div class="images__item">
+        <img src="{{ img.image.url }}" alt="">
+        {% if img.is_main %}<span class="badge badge--ok">Asosiy</span>{% endif %}
+        <form method="post" action="{% url 'panel_image_delete' img.pk %}">
+          {% csrf_token %}<button class="btn btn--sm btn--danger">O'chirish</button>
+        </form>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

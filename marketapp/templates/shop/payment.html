@@ -1,0 +1,17 @@
+{% extends 'shop/base.html' %}
+{% load humanize %}
+{% block title %}To'lov — MyShop{% endblock %}
+
+{% block content %}
+<div class="card payment">
+  <h1>Buyurtma #{{ order.id }} uchun to'lov</h1>
+  <p>To'lov summasi: <b>{{ order.total_price|floatformat:0|intcomma }} so'm</b></p>
+  <p>To'lov usuli: <b>{{ order.get_payment_method_display }}</b></p>
+
+  {# TODO: Click / Payme havolasi view'da yasaladi va shu yerga qo'yiladi #}
+  <a href="#" class="btn btn--primary btn--block">To'lovga o'tish</a>
+
+  <p class="muted small">To'lov tizimi tez orada ulanadi. Hozircha operator siz bilan bog'lanadi.</p>
+  <a href="{% url 'order_success' order.id %}" class="btn btn--block">Keyinroq to'layman</a>
+</div>
+{% endblock %}

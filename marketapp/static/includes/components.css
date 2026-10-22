@@ -1,0 +1,325 @@
+/* =========================================================
+   components.css — umumiy elementlar + includes/ shablonlari
+   (do'kon va panel ikkalasi ham ulaydi)
+   ========================================================= */
+
+/* ============ O'ZGARUVCHILAR ============ */
+:root {
+  --primary: #0f766e;
+  --primary-dark: #0b5d57;
+  --primary-light: #e6f4f2;
+  --accent: #f97316;
+  --danger: #dc2626;
+  --danger-light: #fdecec;
+  --warning: #d97706;
+  --warning-light: #fef3e2;
+  --success: #16a34a;
+  --success-light: #e8f7ee;
+  --info: #2563eb;
+  --info-light: #e8effd;
+
+  --text: #1f2937;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --bg: #f6f7f9;
+  --white: #ffffff;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, .06), 0 1px 2px rgba(0, 0, 0, .04);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, .08);
+  --container: 1200px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ============ RESET ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text);
+  background: var(--bg);
+}
+
+a { color: var(--primary); text-decoration: none; }
+a:hover { color: var(--primary-dark); }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+h1 { font-size: 1.75rem; line-height: 1.25; margin-bottom: 1rem; }
+h2 { font-size: 1.25rem; margin-bottom: .75rem; }
+h3 { font-size: 1rem; margin-bottom: .5rem; }
+
+.container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 16px; }
+
+/* ============ YORDAMCHI KLASSLAR ============ */
+.muted  { color: var(--text-muted); }
+.small  { font-size: .85rem; }
+.center { text-align: center; justify-content: center; }
+.row    { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
+.inline { display: inline; }
+
+/* ============ TUGMALAR ============ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  padding: .6rem 1.1rem;
+  font: inherit;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+  white-space: nowrap;
+}
+.btn:hover { border-color: var(--primary); color: var(--primary); }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+
+.btn--primary { background: var(--primary); border-color: var(--primary); color: var(--white); }
+.btn--primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); color: var(--white); }
+
+.btn--danger { color: var(--danger); border-color: #f3c4c4; }
+.btn--danger:hover { background: var(--danger); border-color: var(--danger); color: var(--white); }
+
+.btn--sm    { padding: .35rem .7rem; font-size: .85rem; }
+.btn--block { width: 100%; }
+
+button.link {
+  background: none;
+  border: none;
+  font: inherit;
+  color: var(--primary);
+  cursor: pointer;
+  padding: 0;
+}
+button.link:hover { text-decoration: underline; }
+
+/* ============ KARTA ============ */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.25rem;
+}
+
+/* ============ ALERT (Django messages) ============ */
+.alert {
+  padding: .75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: .75rem;
+  border: 1px solid transparent;
+  transition: opacity .4s;
+}
+.alert--success { background: var(--success-light); color: #166534; border-color: #bfe5cc; }
+.alert--error   { background: var(--danger-light);  color: #991b1b; border-color: #f3c4c4; }
+.alert--warning { background: var(--warning-light); color: #92400e; border-color: #f5d9a8; }
+.alert--info    { background: var(--info-light);    color: #1e40af; border-color: #c3d4f7; }
+
+/* ============ TOAST (JS xabarlari) ============ */
+#toasts {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.toast {
+  padding: .75rem 1.1rem;
+  color: var(--white);
+  background: var(--text);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  animation: toast-in .25s ease;
+  transition: opacity .4s, transform .4s;
+}
+.toast--success { background: var(--success); }
+.toast--error   { background: var(--danger); }
+.toast.hide { opacity: 0; transform: translateY(10px); }
+@keyframes toast-in { from { opacity: 0; transform: translateY(10px); } }
+
+/* ============ BADGE va STATUS ============ */
+.badge {
+  display: inline-block;
+  min-width: 1.4rem;
+  padding: .1rem .5rem;
+  font-size: .75rem;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 999px;
+  background: #eef0f3;
+  color: var(--text-muted);
+}
+.badge--ok     { background: var(--success-light); color: var(--success); }
+.badge--warn   { background: var(--warning-light); color: var(--warning); }
+.badge--danger { background: var(--danger-light);  color: var(--danger); }
+
+.status {
+  display: inline-block;
+  padding: .15rem .6rem;
+  font-size: .8rem;
+  font-weight: 600;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.status--new      { background: var(--info-light);    color: var(--info); }
+.status--paid      { background: var(--primary-light); color: var(--primary); }
+.status--shipping  { background: var(--warning-light); color: var(--warning); }
+.status--delivered { background: var(--success-light); color: var(--success); }
+.status--canceled  { background: #f1f2f4;              color: var(--text-muted); }
+
+/* ============ JADVAL ============ */
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td {
+  padding: .7rem .75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.table th { font-size: .8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .03em; }
+.table tfoot th { font-size: 1rem; color: var(--text); text-transform: none; border-bottom: none; }
+.table tbody tr:hover { background: #fafbfc; }
+
+.thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+/* ============ FORMA (includes/form_fields.html) ============ */
+.form h1, .form h2 { margin-bottom: 1rem; }
+
+.form__group { margin-bottom: 1rem; }
+.form__group label { display: block; margin-bottom: .35rem; font-weight: 500; font-size: .9rem; }
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]),
+select,
+textarea {
+  width: 100%;
+  padding: .6rem .75rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color .15s, box-shadow .15s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+textarea { resize: vertical; }
+input[type="checkbox"] { width: 1rem; height: 1rem; accent-color: var(--primary); }
+
+input[type="file"] {
+  width: 100%;
+  padding: .6rem;
+  font: inherit;
+  background: var(--bg);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.checkbox { display: flex !important; align-items: center; gap: .5rem; cursor: pointer; }
+
+.has-error input, .has-error select, .has-error textarea { border-color: var(--danger); }
+.error { display: block; margin-top: .3rem; color: var(--danger); font-size: .82rem; }
+.help  { display: block; margin-top: .3rem; color: var(--text-muted); font-size: .8rem; }
+.help ul { list-style: disc; padding-left: 1.1rem; }
+
+/* ============ PAGINATION (includes/pagination.html) ============ */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0 .5rem;
+}
+.pagination a {
+  padding: .45rem .9rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+}
+.pagination a:hover { border-color: var(--primary); color: var(--primary); }
+.pagination span { color: var(--text-muted); font-size: .9rem; }
+
+/* ============ MAHSULOT KARTOCHKASI (includes/product_card.html) ============ */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: box-shadow .2s, transform .2s;
+}
+.product-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+
+.product-card__img { position: relative; display: block; aspect-ratio: 1 / 1; background: #f3f4f6; }
+.product-card__img img { width: 100%; height: 100%; object-fit: cover; }
+
+.product-card__sale {
+  position: absolute;
+  top: .6rem;
+  left: .6rem;
+  padding: .2rem .55rem;
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--white);
+  background: var(--accent);
+  border-radius: var(--radius-sm);
+}
+
+.product-card__body { display: flex; flex-direction: column; gap: .5rem; flex: 1; padding: .9rem; }
+
+.product-card__name {
+  color: var(--text);
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.9em;
+}
+.product-card__name:hover { color: var(--primary); }
+
+.product-card .add-to-cart { margin-top: auto; }
+
+.no-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+  color: var(--text-muted);
+  font-size: .85rem;
+  background: #f3f4f6;
+}
+
+/* Narx */
+.price { display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
+.price b { font-size: 1.05rem; color: var(--text); }
+.price s { font-size: .85rem; color: var(--text-muted); }
+
+/* ============ MOBIL ============ */
+@media (max-width: 700px) {
+  h1 { font-size: 1.4rem; }
+  .table { display: block; overflow-x: auto; white-space: nowrap; }
+  .card { padding: 1rem; }
+}

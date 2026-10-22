@@ -1,0 +1,38 @@
+{% extends 'shop/panel/base.html' %}
+{% block title %}Kategoriyalar{% endblock %}
+{% block page_title %}Kategoriyalar{% endblock %}
+
+{% block content %}
+<div class="grid-2">
+  <div class="card">
+    <table class="table">
+      <thead><tr><th></th><th>Nomi</th><th>Ota kategoriya</th><th>Mahsulotlar</th><th></th></tr></thead>
+      <tbody>
+      {% for c in categories %}
+        <tr>
+          <td>{% if c.image %}<img src="{{ c.image.url }}" class="thumb" alt="">{% endif %}</td>
+          <td>{{ c.name }}</td>
+          <td>{{ c.parent.name|default:"—" }}</td>
+          <td>{{ c.n }}</td>
+          <td class="actions">
+            <form method="post" action="{% url 'panel_category_delete' c.pk %}"
+                  onsubmit="return confirm('Kategoriya o\'chirilsinmi?')">
+              {% csrf_token %}<button class="btn btn--sm btn--danger">O'chirish</button>
+            </form>
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5" class="muted">Kategoriya yo'q</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" class="card form">
+    <h2>Yangi kategoriya</h2>
+    {% csrf_token %}
+    {% include 'shop/includes/form_fields.html' %}
+    <button class="btn btn--primary btn--block">Qo'shish</button>
+  </form>
+</div>
+{% endblock %}

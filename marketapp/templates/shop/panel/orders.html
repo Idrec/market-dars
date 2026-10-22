@@ -1,0 +1,21 @@
+{% extends 'shop/panel/base.html' %}
+{% block title %}Buyurtmalar{% endblock %}
+{% block page_title %}Buyurtmalar{% endblock %}
+
+{% block content %}
+<div class="card">
+  <form method="get" class="filters">
+    <input type="search" name="q" value="{{ q }}" placeholder="Ism, telefon yoki №">
+    <select name="status" onchange="this.form.submit()">
+      <option value="">Barcha holatlar</option>
+      {% for key, label in statuses %}
+        <option value="{{ key }}" {% if key == status %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn">Qidirish</button>
+  </form>
+
+  {% include 'shop/panel/_orders_table.html' with orders=page_obj %}
+  {% include 'shop/panel/_pagination.html' %}
+</div>
+{% endblock %}

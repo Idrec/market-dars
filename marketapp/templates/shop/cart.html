@@ -1,0 +1,57 @@
+{% extends 'shop/base.html' %}
+{% load humanize %}
+{% block title %}Savat — MyShop{% endblock %}
+
+{% block content %}
+<h1>Savat</h1>
+
+{% if cart %}
+<div class="cart">
+  <table class="table cart-table">
+    <thead>
+      <tr><th>Mahsulot</th><th>Narx</th><th>Soni</th><th>Jami</th><th></th></tr>
+    </thead>
+    <tbody>
+    {% for item in cart %}
+      <tr data-id="{{ item.product.id }}" data-price="{{ item.price|stringformat:'s' }}">
+        <td class="cart-product">
+          {% if item.product.main_image %}
+            <img src="{{ item.product.main_image.image.url }}" alt="" class="thumb">
+          {% endif %}
+          <a href="{% url 'product_detail' item.product.slug %}">{{ item.product.name }}</a>
+        </td>
+        <td>{{ item.price|floatformat:0|intcomma }}</td>
+        <td>
+          <form method="post" action="{% url 'cart_add' item.product.id %}" class="qty-form">
+            {% csrf_token %}
+            <input type="hidden" name="override" value="1">
+            <input type="number" name="quantity" value="{{ item.quantity }}"
+                   min="1" max="{{ item.product.stock }}" class="qty-input">
+            <button class="btn btn--sm qty-update" title="Yangilash">↻</button>
+          </form>
+        </td>
+        <td class="item-total">{{ item.total|floatformat:0|intcomma }}</td>
+        <td>
+          <form method="post" action="{% url 'cart_remove' item.product.id %}" class="remove-form">
+            {% csrf_token %}
+            <button class="btn btn--sm btn--danger" title="O'chirish">✕</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="cart-summary">
+    <p>Umumiy summa: <b id="cart-total">{{ total|floatformat:0|intcomma }}</b> so'm</p>
+    <a href="{% url 'product_list' %}" class="btn">← Xaridni davom ettirish</a>
+    <a href="{% url 'checkout' %}" class="btn btn--primary">Buyurtma berish</a>
+  </div>
+</div>
+{% else %}
+<div class="empty">
+  <p>Savatingiz bo'sh.</p>
+  <a href="{% url 'product_list' %}" class="btn btn--primary">Katalogga o'tish</a>
+</div>
+{% endif %}
+{% endblock %}

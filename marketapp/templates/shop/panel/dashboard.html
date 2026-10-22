@@ -1,0 +1,37 @@
+{% extends 'shop/panel/base.html' %}
+{% load humanize %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="stats">
+  <div class="stat"><span>Bugungi buyurtmalar</span><b>{{ today_orders }}</b></div>
+  <div class="stat stat--warn"><span>Yangi buyurtmalar</span><b>{{ new_orders }}</b></div>
+  <div class="stat"><span>Tushum</span><b>{{ revenue|floatformat:0|intcomma }} so'm</b></div>
+  <div class="stat"><span>Mahsulotlar</span><b>{{ product_count }}</b></div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card__head">
+      <h2>Oxirgi buyurtmalar</h2>
+      <a href="{% url 'panel_orders' %}">Barchasi →</a>
+    </div>
+    {% include 'shop/panel/_orders_table.html' with orders=recent_orders %}
+  </div>
+
+  <div class="card">
+    <div class="card__head"><h2>Kam qolgan mahsulotlar</h2></div>
+    <ul class="list">
+      {% for p in low_stock %}
+        <li>
+          <a href="{% url 'panel_product_edit' p.pk %}">{{ p.name }}</a>
+          <span class="badge {% if p.stock == 0 %}badge--danger{% else %}badge--warn{% endif %}">{{ p.stock }} ta</span>
+        </li>
+      {% empty %}
+        <li class="muted">Hammasi yetarli</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

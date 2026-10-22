@@ -1,0 +1,281 @@
+/* =========================================================
+   style.css — do'kon sahifalari
+   ========================================================= */
+
+/* ============ UMUMIY TUZILMA ============ */
+body { display: flex; flex-direction: column; min-height: 100vh; }
+.main { flex: 1; padding-top: 1.5rem; padding-bottom: 3rem; }
+.messages { padding-top: 1rem; }
+
+/* JS ishlasa, savatdagi "↻" tugmasi kerak emas (miqdor avtomatik yangilanadi) */
+.js .qty-update { display: none; }
+
+/* ============ HEADER ============ */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+.header__inner { display: flex; align-items: center; gap: 1.25rem; height: 64px; }
+
+.logo { font-size: 1.4rem; font-weight: 800; color: var(--primary); letter-spacing: -.02em; }
+
+.search { display: flex; flex: 1; max-width: 480px; }
+.search input { border-radius: var(--radius-sm) 0 0 var(--radius-sm) !important; }
+.search button {
+  padding: 0 1rem;
+  font: inherit;
+  color: var(--white);
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  cursor: pointer;
+}
+.search button:hover { background: var(--primary-dark); }
+
+.nav { display: flex; align-items: center; gap: 1.1rem; margin-left: auto; }
+.nav a { color: var(--text); font-weight: 500; }
+.nav a:hover { color: var(--primary); }
+
+.cart-link { display: inline-flex; align-items: center; gap: .35rem; }
+.cart-link .badge { background: var(--accent); color: var(--white); }
+
+.burger {
+  display: none;
+  margin-left: auto;
+  padding: .3rem .6rem;
+  font-size: 1.4rem;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+/* ============ FOOTER ============ */
+.footer {
+  padding: 1.5rem 0;
+  color: var(--text-muted);
+  font-size: .9rem;
+  text-align: center;
+  background: var(--white);
+  border-top: 1px solid var(--border);
+}
+
+/* ============ BOSH SAHIFA ============ */
+.hero {
+  display: flex;
+  align-items: center;
+  min-height: 280px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--primary) 0%, #134e4a 100%);
+  border-radius: var(--radius);
+}
+.hero__text { max-width: 560px; }
+.hero h1 { font-size: 2.2rem; margin-bottom: .75rem; }
+.hero p { margin-bottom: 1.5rem; opacity: .9; font-size: 1.05rem; }
+.hero .btn--primary { background: var(--white); color: var(--primary); border-color: var(--white); }
+.hero .btn--primary:hover { background: var(--primary-light); }
+
+.section { margin-bottom: 2.5rem; }
+.section__head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
+.section__title { font-size: 1.35rem; margin-bottom: 1rem; }
+.section__head .section__title { margin-bottom: 0; }
+
+.categories { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .6rem;
+  padding: 1rem;
+  color: var(--text);
+  font-weight: 500;
+  text-align: center;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color .15s, box-shadow .15s;
+}
+.category-card:hover { border-color: var(--primary); box-shadow: var(--shadow-lg); color: var(--primary); }
+.category-card img { width: 72px; height: 72px; object-fit: cover; border-radius: 50%; }
+
+/* Mahsulotlar setkasi */
+.products { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem; }
+
+/* ============ KATALOG ============ */
+.catalog { display: grid; grid-template-columns: 250px 1fr; gap: 1.75rem; align-items: start; }
+
+.catalog__sidebar {
+  position: sticky;
+  top: 80px;
+  padding: 1.25rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.catalog__sidebar h3 { margin-top: 1rem; }
+.catalog__sidebar h3:first-child { margin-top: 0; }
+
+.cat-list { margin-bottom: 1rem; }
+.cat-list a {
+  display: block;
+  padding: .4rem .6rem;
+  color: var(--text);
+  border-radius: var(--radius-sm);
+}
+.cat-list a:hover { background: var(--bg); }
+.cat-list a.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+
+.filters .row { flex-wrap: nowrap; margin-bottom: .5rem; }
+.filters select { margin-bottom: 1rem; }
+.filters .btn { margin-top: .5rem; }
+
+.catalog__head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1rem; }
+.catalog__head h1 { margin-bottom: 0; }
+
+/* ============ MAHSULOT SAHIFASI ============ */
+.breadcrumbs { margin-bottom: 1.25rem; font-size: .9rem; color: var(--text-muted); }
+.breadcrumbs a { color: var(--text-muted); }
+.breadcrumbs a:hover { color: var(--primary); }
+
+.product-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin-bottom: 3rem; }
+
+.gallery__main {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.gallery__thumbs { display: flex; gap: .6rem; margin-top: .75rem; flex-wrap: wrap; }
+.gallery__thumb {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  opacity: .7;
+  transition: opacity .15s, border-color .15s;
+}
+.gallery__thumb:hover { opacity: 1; }
+.gallery__thumb.active { border-color: var(--primary); opacity: 1; }
+
+.product-info h1 { font-size: 1.9rem; }
+.price--lg { margin-bottom: 1rem; }
+.price--lg b { font-size: 1.75rem; color: var(--primary); }
+.price--lg s { font-size: 1.05rem; }
+
+.stock { margin-bottom: 1.25rem; font-weight: 500; }
+.stock--ok  { color: var(--success); }
+.stock--out { color: var(--danger); }
+
+.qty-input { width: 80px !important; text-align: center; }
+
+.description { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.description p { margin-bottom: .75rem; }
+
+/* ============ SAVAT ============ */
+.cart-table { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.cart-product { display: flex; align-items: center; gap: .75rem; }
+.cart-product a { color: var(--text); font-weight: 500; }
+.cart-product a:hover { color: var(--primary); }
+
+.qty-form { display: flex; align-items: center; gap: .4rem; }
+
+.cart-summary {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.cart-summary p { margin-right: auto; font-size: 1.1rem; }
+.cart-summary b { font-size: 1.35rem; color: var(--primary); }
+
+.empty { padding: 4rem 1rem; text-align: center; }
+.empty p { margin-bottom: 1rem; color: var(--text-muted); font-size: 1.1rem; }
+
+/* ============ CHECKOUT ============ */
+.checkout { display: grid; grid-template-columns: 1fr 360px; gap: 1.5rem; align-items: start; }
+
+.order-summary { position: sticky; top: 80px; }
+.summary-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .55rem 0;
+  font-size: .92rem;
+  border-bottom: 1px dashed var(--border);
+}
+.summary-total { display: flex; justify-content: space-between; margin: 1rem 0; font-size: 1.1rem; }
+.summary-total b { color: var(--primary); }
+
+/* ============ MUVAFFAQIYAT / TO'LOV ============ */
+.success, .payment { max-width: 560px; margin: 2rem auto; padding: 2.5rem 2rem; text-align: center; }
+.success__icon { font-size: 3.5rem; margin-bottom: .75rem; }
+.success p, .payment p { margin-bottom: .6rem; }
+.success .row { margin-top: 1.5rem; }
+.payment .btn { margin-top: .75rem; }
+
+/* ============ AUTH ============ */
+.auth { display: flex; justify-content: center; padding: 1rem 0; }
+.auth .form { width: 100%; max-width: 420px; padding: 2rem; }
+.auth h1 { text-align: center; }
+.auth .center { margin-top: 1rem; }
+
+/* ============ PROFIL ============ */
+.profile { display: grid; grid-template-columns: 360px 1fr; gap: 1.5rem; align-items: start; }
+.back { display: inline-block; margin-bottom: 1rem; color: var(--text-muted); }
+.back:hover { color: var(--primary); }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 960px) {
+  .catalog, .checkout, .profile { grid-template-columns: 1fr; }
+  .catalog__sidebar, .order-summary { position: static; }
+  .product-detail { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+
+@media (max-width: 760px) {
+  .header__inner { flex-wrap: wrap; height: auto; padding-top: .75rem; padding-bottom: .75rem; gap: .75rem; }
+  .burger { display: block; }
+  .search { order: 3; flex-basis: 100%; max-width: none; }
+
+  .nav {
+    display: none;
+    order: 4;
+    flex-basis: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .25rem;
+    padding-top: .5rem;
+    border-top: 1px solid var(--border);
+  }
+  .nav.open { display: flex; }
+  .nav a, .nav button.link { padding: .5rem 0; }
+
+  .hero { padding: 1.75rem; min-height: auto; }
+  .hero h1 { font-size: 1.6rem; }
+
+  .products { grid-template-columns: repeat(2, 1fr); gap: .75rem; }
+  .product-card__body { padding: .7rem; }
+  .categories { grid-template-columns: repeat(3, 1fr); }
+
+  .cart-summary { flex-direction: column; align-items: stretch; }
+  .cart-summary p { margin-right: 0; }
+}
+
+@media (max-width: 420px) {
+  .categories { grid-template-columns: repeat(2, 1fr); }
+  .price b { font-size: .95rem; }
+}

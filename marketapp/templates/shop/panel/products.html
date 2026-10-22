@@ -1,0 +1,53 @@
+{% extends 'shop/panel/base.html' %}
+{% load humanize %}
+{% block title %}Mahsulotlar{% endblock %}
+{% block page_title %}Mahsulotlar{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card__head">
+    <form method="get" class="filters">
+      <input type="search" name="q" value="{{ q }}" placeholder="Qidirish...">
+      <button class="btn">Qidirish</button>
+    </form>
+    <a href="{% url 'panel_product_add' %}" class="btn btn--primary">+ Yangi mahsulot</a>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr><th></th><th>Nomi</th><th>Kategoriya</th><th>Narx</th><th>Omborda</th><th>Holat</th><th></th></tr>
+    </thead>
+    <tbody>
+    {% for p in page_obj %}
+      <tr>
+        <td>{% if p.main_image %}<img src="{{ p.main_image.image.url }}" class="thumb" alt="">{% endif %}</td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.category.name }}</td>
+        <td>
+          {% if p.discount_price %}
+            <s class="muted">{{ p.price|floatformat:0|intcomma }}</s> {{ p.discount_price|floatformat:0|intcomma }}
+          {% else %}
+            {{ p.price|floatformat:0|intcomma }}
+          {% endif %}
+        </td>
+        <td>{{ p.stock }}</td>
+        <td>
+          {% if p.is_active %}<span class="badge badge--ok">Faol</span>
+          {% else %}<span class="badge">Yashirin</span>{% endif %}
+        </td>
+        <td class="actions">
+          <a href="{% url 'panel_product_edit' p.pk %}" class="btn btn--sm">Tahrirlash</a>
+          <form method="post" action="{% url 'panel_product_delete' p.pk %}"
+                onsubmit="return confirm('Mahsulot o\'chirilsinmi?')">
+            {% csrf_token %}<button class="btn btn--sm btn--danger">O'chirish</button>
+          </form>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="7" class="muted">Mahsulot yo'q</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% include 'shop/panel/_pagination.html' %}
+</div>
+{% endblock %}

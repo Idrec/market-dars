@@ -1,0 +1,71 @@
+{% extends 'shop/base.html' %}
+{% load humanize %}
+{% block title %}{{ product.name }} — MyShop{% endblock %}
+
+{% block content %}
+<nav class="breadcrumbs">
+  <a href="{% url 'home' %}">Bosh sahifa</a> /
+  <a href="{% url 'category' product.category.slug %}">{{ product.category.name }}</a> /
+  <span>{{ product.name }}</span>
+</nav>
+
+<div class="product-detail">
+  <div class="gallery">
+    {% if product.main_image %}
+      <img src="{{ product.main_image.image.url }}" alt="{{ product.name }}" id="main-img" class="gallery__main">
+      {% if product.images.all|length > 1 %}
+      <div class="gallery__thumbs">
+        {% for img in product.images.all %}
+          <img src="{{ img.image.url }}" alt="" data-full="{{ img.image.url }}"
+               class="gallery__thumb{% if img == product.main_image %} active{% endif %}">
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% else %}
+      <div class="no-image gallery__main">Rasm yo'q</div>
+    {% endif %}
+  </div>
+
+  <div class="product-info">
+    <h1>{{ product.name }}</h1>
+
+    <div class="price price--lg">
+      {% if product.discount_price %}
+        <s>{{ product.price|floatformat:0|intcomma }} so'm</s>
+        <b>{{ product.discount_price|floatformat:0|intcomma }} so'm</b>
+      {% else %}
+        <b>{{ product.price|floatformat:0|intcomma }} so'm</b>
+      {% endif %}
+    </div>
+
+    {% if product.stock > 0 %}
+      <p class="stock stock--ok">✔ Omborda bor ({{ product.stock }} ta)</p>
+      <form method="post" action="{% url 'cart_add' product.id %}" class="add-to-cart row">
+        {% csrf_token %}
+        <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="qty-input">
+        <button class="btn btn--primary">Savatga qo'shish</button>
+      </form>
+    {% else %}
+      <p class="stock stock--out">✖ Hozircha mavjud emas</p>
+    {% endif %}
+
+    {% if product.description %}
+      <div class="description">
+        <h3>Tavsif</h3>
+        {{ product.description|linebreaks }}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% if related %}
+<section class="section">
+  <h2 class="section__title">O'xshash mahsulotlar</h2>
+  <div class="products">
+    {% for product in related %}
+      {% include 'shop/includes/product_card.html' %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

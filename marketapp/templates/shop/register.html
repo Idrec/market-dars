@@ -1,0 +1,14 @@
+{% extends 'shop/base.html' %}
+{% block title %}Ro'yxatdan o'tish — MyShop{% endblock %}
+
+{% block content %}
+<div class="auth">
+  <form method="post" class="card form">
+    <h1>Ro'yxatdan o'tish</h1>
+    {% csrf_token %}
+    {% include 'shop/includes/form_fields.html' %}
+    <button class="btn btn--primary btn--block">Ro'yxatdan o'tish</button>
+    <p class="center small">Akkauntingiz bormi? <a href="{% url 'login' %}">Kirish</a></p>
+  </form>
+</div>
+{% endblock %}

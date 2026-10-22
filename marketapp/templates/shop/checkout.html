@@ -1,0 +1,33 @@
+{% extends 'shop/base.html' %}
+{% load humanize %}
+{% block title %}Buyurtma berish — MyShop{% endblock %}
+
+{% block content %}
+<h1>Buyurtma berish</h1>
+
+<div class="checkout">
+  <form method="post" class="card form" novalidate>
+    {% csrf_token %}
+    {% include 'shop/includes/form_fields.html' %}
+    <button class="btn btn--primary btn--block">Buyurtmani tasdiqlash</button>
+  </form>
+
+  <aside class="card order-summary">
+    <h3>Buyurtmangiz</h3>
+    <ul class="summary-list">
+      {% for item in cart %}
+        <li>
+          <span>{{ item.product.name }} × {{ item.quantity }}</span>
+          <span>{{ item.total|floatformat:0|intcomma }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+    <p class="summary-total">Jami: <b>{{ total|floatformat:0|intcomma }} so'm</b></p>
+    {% if not user.is_authenticated %}
+      <p class="muted small">
+        <a href="{% url 'login' %}?next={% url 'checkout' %}">Kiring</a> — ma'lumotlaringiz avtomatik to'ldiriladi.
+      </p>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'shop/base.html' %}
+{% load humanize %}
+{% block title %}Buyurtma qabul qilindi — MyShop{% endblock %}
+
+{% block content %}
+<div class="success card">
+  <div class="success__icon">✅</div>
+  <h1>Rahmat! Buyurtmangiz qabul qilindi</h1>
+  <p>Buyurtma raqami: <b>#{{ order.id }}</b></p>
+  <p>Summa: <b>{{ order.total_price|floatformat:0|intcomma }} so'm</b> ({{ order.get_payment_method_display }})</p>
+  <p class="muted">Tez orada operatorimiz <b>{{ order.phone }}</b> raqamiga qo'ng'iroq qiladi.</p>
+
+  <div class="row center">
+    <a href="{% url 'home' %}" class="btn">Bosh sahifa</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'order_detail' order.id %}" class="btn btn--primary">Buyurtmani ko'rish</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

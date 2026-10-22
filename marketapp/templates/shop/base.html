@@ -1,190 +1,58 @@
-[21.10.2026 8:39] Miron Kursdosh: {% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>{% block title %}Online Do'kon{% endblock %}</title>
-
-    <meta name="description"
-          content="{% block meta_description %}Online do'kon. Sifatli mahsulotlar va qulay narxlar.{% endblock %}">
-
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
-    {% block extra_css %}{% endblock %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MyShop{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'includes/components.css' %}">
+  <link rel="stylesheet" href="{% static 'shop/style.css' %}">
+  {% block extra_head %}{% endblock %}
 </head>
-
 <body>
+  <header class="header">
+    <div class="container header__inner">
+      <a href="{% url 'home' %}" class="logo">MyShop</a>
 
-    <!-- HEADER -->
-    <header class="header">
-        <div class="container header__inner">
+      <form action="{% url 'product_list' %}" method="get" class="search">
+        <input type="search" name="q" value="{{ q|default:'' }}" placeholder="Mahsulot qidirish...">
+        <button type="submit">Qidirish</button>
+      </form>
 
-            <a href="{% url 'home' %}" class="logo">
-                <span>🛍</span>
-                <span>Online Do'kon</span>
-            </a>
+      <button class="burger" id="burger" aria-label="Menyu">☰</button>
 
-            <!-- QIDIRUV -->
-            <form method="get"
-                  action="{% url 'product_list' %}"
-                  class="search-form">
-
-                <input
-                    type="search"
-                    name="q"
-                    placeholder="Mahsulot qidirish..."
-                    value="{{ request.GET.q|default:'' }}"
-                    aria-label="Mahsulot qidirish"
-                >
-
-                <button type="submit">Qidirish</button>
-            </form>
-
-            <!-- SAVAT -->
-            <a href="{% url 'cart_detail' %}" class="header__cart">
-                🛒 Savat
-                <span class="cart-count">
-                    {{ cart_count|default:0 }}
-                </span>
-            </a>
-
-        </div>
-    </header>
-
-
-    <!-- NAVIGATION -->
-    <nav class="navbar">
-        <div class="container navbar__inner">
-
-            <a href="{% url 'home' %}" class="navbar__link">
-                Bosh sahifa
-            </a>
-
-            <a href="{% url 'product_list' %}" class="navbar__link">
-                Mahsulotlar
-            </a>
-
-            <a href="{% url 'cart_detail' %}" class="navbar__link">
-                Savat
-            </a>
-
-            {% if user.is_authenticated %}
-
-                <a href="{% url 'profile' %}" class="navbar__link">
-                    Profil
-                </a>
-
-                <a href="{% url 'order_detail' 1 %}"
-                   class="navbar__link">
-                    Buyurtmalar
-                </a>
-
-                <form method="post"
-                      action="{% url 'logout' %}"
-                      class="logout-form">
-                    {% csrf_token %}
-                    <button type="submit" class="navbar__button">
-                        Chiqish
-                    </button>
-                </form>
-
-            {% else %}
-
-                <a href="{% url 'login' %}" class="navbar__link">
-                    Kirish
-                </a>
-
-                <a href="{% url 'register' %}" class="navbar__link">
-                    Ro'yxatdan o'tish
-                </a>
-
-            {% endif %}
-
-        </div>
-    </nav>
-
-
-    <!-- ASOSIY KONTENT -->
-    <main class="container main-content">
-
-        <!-- XABARLAR -->
-        {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                    <div class="alert alert--{{ message.tags }}"
-                         role="status">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
+      <nav class="nav" id="nav">
+        <a href="{% url 'product_list' %}">Katalog</a>
+        {% if user.is_authenticated %}
+          {% if user.is_staff %}<a href="{% url 'panel_dashboard' %}">Panel</a>{% endif %}
+          <a href="{% url 'profile' %}">{{ user.first_name|default:user.username }}</a>
+          <form method="post" action="{% url 'logout' %}" class="inline">
+            {% csrf_token %}<button class="link">Chiqish</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}">Kirish</a>
+          <a href="{% url 'register' %}">Ro'yxatdan o'tish</a>
         {% endif %}
+        <a href="{% url 'cart_detail' %}" class="cart-link">
+          🛒 Savat <span class="badge" id="cart-count">{{ cart_count|default:0 }}</span>
+        </a>
+      </nav>
+    </div>
+  </header>
 
-        {% block content %}
-        {% endblock %}
+  {% if messages %}
+  <div class="container messages">
+    {% for m in messages %}<div class="alert alert--{{ m.tags }}">{{ m }}</div>{% endfor %}
+  </div>
+  {% endif %}
 
-    </main>
+  <main class="container main">{% block content %}{% endblock %}</main>
 
+  <footer class="footer">
+    <div class="container">© {% now "Y" %} MyShop. Barcha huquqlar himoyalangan.</div>
+  </footer>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container footer__inner">
-
-            <div class="footer__about">
-                <a href="{% url 'home' %}" class="logo">
-                    🛍 Online Do'kon
-                </a>
-
-                <p>
-                    Sifatli mahsulotlar va qulay narxlar.
-                </p>
-            </div>
-
-            <div class="footer__links">
-                <h3>Foydali havolalar</h3>
-
-                <a href="{% url 'home' %}">Bosh sahifa</a>
-
-                <a href="{% url 'product_list' %}">
-                    Mahsulotlar
-                </a>
-[21.10.2026 8:39] Miron Kursdosh: <a href="{% url 'cart_detail' %}">
-                    Savat
-                </a>
-
-                <a href="{% url 'checkout' %}">
-                    Buyurtma berish
-                </a>
-            </div>
-
-            <div class="footer__account">
-                <h3>Hisob</h3>
-
-                {% if user.is_authenticated %}
-                    <a href="{% url 'profile' %}">Profilim</a>
-                {% else %}
-                    <a href="{% url 'login' %}">Kirish</a>
-                    <a href="{% url 'register' %}">
-                        Ro'yxatdan o'tish
-                    </a>
-                {% endif %}
-            </div>
-
-        </div>
-
-        <div class="footer__bottom">
-            <div class="container">
-                <p>
-                    &copy; {% now "Y" %} Online Do'kon.
-                    Barcha huquqlar himoyalangan.
-                </p>
-            </div>
-        </div>
-    </footer>
-
-
-    {% block extra_js %}{% endblock %}
-
+  <script src="{% static 'shop/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
 </body>
 </html>
